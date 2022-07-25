@@ -18,9 +18,9 @@ const extractMessagesFromJson = (files: { name: string; data: JSON }[]) => {
     return data.flatMap((content) => {
       if (content?.type !== "message") return [];
       const timestamp = new Date(Number.parseFloat(content?.ts) * 1000).toISOString();
-      const channel = name.split("/")[0];
+      const channel = name.split("/")[0] ?? "";
       const text:string = content.text;
-      const user:string = content.username ?? content.user_profile?.name;
+      const user:string = content.username ?? content.user_profile?.name ?? "";
       return { timestamp, channel, text, user };
     });
   });
