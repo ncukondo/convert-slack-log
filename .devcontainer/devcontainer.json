@@ -1,0 +1,25 @@
+{
+  "name": "${localWorkspaceFolderBasename}",
+  "context": "..",
+  "dockerFile": "dockerfile",
+  "workspaceFolder": "/usr/src/${localWorkspaceFolderBasename}",
+  "mounts": [
+    "source=${localWorkspaceFolder}/,target=/usr/src/${localWorkspaceFolderBasename},type=bind,consistency=cached"
+  ],
+  "extensions": [
+    "coenraads.bracket-pair-colorizer-2",
+    "oderwat.indent-rainbow",
+    "ms-azuretools.vscode-docker",
+    "denoland.vscode-deno"
+  ],
+	// Comment out the next line to run as root instead.
+	"remoteUser": "deno",
+  "settings": {
+    "terminal.integrated.profiles.linux": {
+      "bash": {
+        "path": "/bin/sh"
+      }
+    },
+    "terminal.integrated.defaultProfile.linux": "bash"
+  }
+}
