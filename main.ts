@@ -13,7 +13,8 @@ type RawEntry = {
 }
 
 const convertJsonToMessagObj = (name: string, data: RawEntry) => {
-  const timestamp = new Date(Number.parseFloat(data?.ts ?? "") * 1000).toISOString();
+  const unixtime =Number.parseFloat(data?.ts ?? "") * 1000 
+  const timestamp =  unixtime ? new Date(unixtime).toISOString() : "";
   const channel = name.split("/")[0] ?? "";
   const text: string = data.text ?? "";
   const user: string = data.username ?? data.user_profile?.name ?? "";
