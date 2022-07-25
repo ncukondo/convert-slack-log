@@ -1,4 +1,4 @@
-slack-sample.csv
-slack-sample.zip
-convert-slack-log.exe
 convert-slack-log
+*.csv
+*.zip
+*.exe
