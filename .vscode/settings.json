@@ -1,7 +1,11 @@
 {
-  "editor.formatOnSave": false,
+  "editor.formatOnSave": true,
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": true
+  },
+  "[javascript,typescript,json,jsonc]": {
+    "editor.tabSize": 2,
+    "editor.insertSpaces": true
   },
   "deno.codeLens.implementations": true,
   "deno.codeLens.references": true,

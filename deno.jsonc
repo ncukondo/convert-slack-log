@@ -1,9 +1,10 @@
 {
-    "tasks": {
-        "tryrun": "deno run --allow-read --allow-write  main.ts slack-sample.zip",
-        "compile_win":"deno compile --allow-read --allow-write --unstable --target x86_64-pc-windows-msvc  main.ts",
-        "compile_linux":"deno compile --allow-read --allow-write --unstable --target x86_64-unknown-linux-gnu  main.ts",
-        "compile_mac1":"deno compile --allow-read --allow-write --unstable --target x86_64-apple-darwin  main.ts",
-        "compile_mac2":"deno compile --allow-read --allow-write --unstable --target aarch64-apple-darwin  main.ts"
-    }
+  "tasks": {
+    "convert": "deno run --allow-read --allow-write  main.ts",
+    "compile_win":"deno compile --allow-read --allow-write --unstable --target x86_64-pc-windows-msvc  main.ts",
+    "compile_linux":"deno compile --allow-read --allow-write --unstable --target x86_64-unknown-linux-gnu  main.ts",
+    "compile_mac1":"deno compile --allow-read --allow-write --unstable --target x86_64-apple-darwin  main.ts",
+    "compile_mac2":"deno compile --allow-read --allow-write --unstable --target aarch64-apple-darwin  main.ts"
+  },
+  "importMap": "import_map.json"
 }
