@@ -1,4 +1,4 @@
-import { readZip } from "https://deno.land/x/jszip/mod.ts";
+import { readZip } from "https://deno.land/x/jszip@0.11.0/mod.ts";
 import {Buffer} from "https://deno.land/std@0.149.0/io/buffer.ts";
 import { parse,join } from "https://deno.land/std@0.148.0/path/mod.ts";
 
