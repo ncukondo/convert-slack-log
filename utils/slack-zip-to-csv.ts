@@ -1,6 +1,4 @@
-import { readZip } from "jszip";
-import { Buffer } from "buffer";
-import { join, parse } from "path";
+import { JSZip } from "jszip";
 
 type RawEntry = {
   type: string;
@@ -26,8 +24,8 @@ const convertJsonToMessagObj = (name: string, data: RawEntry) => {
   return result;
 };
 
-const readJsonsInZip = async (zipFile: string) => {
-  const zip = await readZip(zipFile);
+const readJsonsInZip = async (zipFile: ArrayBuffer) => {
+  const zip = await new JSZip().loadAsync(zipFile);
   return await Promise.all([...zip].flatMap(async (z) => {
     const name = z.name;
     if (!name.endsWith(".json")) return [];
@@ -46,7 +44,7 @@ const extractMessagesFromJson = (files: { name: string; data: RawEntry }[]) => {
   });
 };
 
-const extractMessagesFromZip = async (zipFile: string) => {
+const extractMessagesFromZip = async (zipFile: ArrayBuffer) => {
   const files = await readJsonsInZip(zipFile);
   return extractMessagesFromJson(files);
 };
@@ -74,32 +72,11 @@ const toCSV = (data: string[][]) => {
   return text;
 };
 
-const saveCSV = async (data: string, filename: string) => {
-  const bom = new Uint8Array([0xEF, 0xBB, 0xBF]);
-  const blob = new Blob([bom, data], { type: "text/csv" });
-  const buffer = await blob.arrayBuffer();
-  const unit8arr = new Buffer(buffer).bytes();
-  await Deno.writeFile(filename, unit8arr);
-};
-
-const convertSlackLogToCsv = async (filename: string) => {
-  const { dir, name } = parse(filename);
-  const messages = await extractMessagesFromZip(filename);
+const convertSlackLogToCsv = async (zipFile: ArrayBuffer) => {
+  const messages = await extractMessagesFromZip(zipFile);
   const table = objectsToTable(messages);
-  const csv = toCSV(table);
-  await (saveCSV(csv, join(dir, name + ".csv")));
-  return join(dir, name + ".csv");
+  return toCSV(table);
+  //return await (addBOM(csv));
 };
 
-const main = async () => {
-  const filename = Deno.args[0];
-  if (!filename) {
-    console.log("input zip filename exported from slack");
-    return;
-  }
-  console.log(`start converting ${filename}`);
-  const output = await convertSlackLogToCsv(filename);
-  console.log(`output as ${output}`);
-};
-
-await main();
+export { convertSlackLogToCsv, readJsonsInZip };
