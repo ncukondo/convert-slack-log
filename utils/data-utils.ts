@@ -4,4 +4,21 @@ const addBOM = (data: string) => {
   return blob;
 };
 
-export { addBOM };
+const readAsArrayBuffer = (file: File) => {
+  const reader = new FileReader();
+
+  return new Promise<ArrayBuffer>((resolve, reject) => {
+    reader.onerror = () => {
+      reader.abort();
+      reject("Unknown error occurred during reading the file");
+    };
+
+    reader.onload = () => {
+      resolve(reader.result as ArrayBuffer);
+    };
+
+    reader.readAsArrayBuffer(file);
+  });
+};
+
+export { addBOM, readAsArrayBuffer };
