@@ -1,6 +1,6 @@
 import { JSZip } from "jszip";
 
-type RawEntry = {
+type MessageEntry = {
   type: string;
   text: string;
   ts?: string;
@@ -12,7 +12,7 @@ type RawEntry = {
   };
 };
 
-const convertJsonToMessagObj = (name: string, data: RawEntry) => {
+const convertJsonToMessagObj = (name: string, data: MessageEntry) => {
   const unixtime = Number.parseFloat(data?.ts ?? "") * 1000;
   const timestamp = unixtime ? new Date(unixtime).toISOString() : "";
   const channel = name.split("/")[0] ?? "";
@@ -26,15 +26,19 @@ const convertJsonToMessagObj = (name: string, data: RawEntry) => {
 
 const readJsonsInZip = async (zipFile: ArrayBuffer) => {
   const zip = await new JSZip().loadAsync(zipFile);
-  return await Promise.all([...zip].flatMap(async (z) => {
-    const name = z.name;
-    if (!name.endsWith(".json")) return [];
-    const data = JSON.parse(await zip.file(name).async("string"));
-    return { name, data };
-  })) as { name: string; data: RawEntry }[];
+  const names = [...zip]
+    .map((z) => z.name)
+    .filter((name) => name.endsWith(".json"))
+    .sort();
+  const jsonTexts = await Promise.all(names.map(async (name) => {
+    return { name, text: (await zip.file(name).async("string")) };
+  }));
+  return jsonTexts.map(({ name, text }) => ({ name, data: JSON.parse(text) }));
 };
 
-const extractMessagesFromJson = (files: { name: string; data: RawEntry }[]) => {
+const extractMessagesFromJson = (
+  files: { name: string; data: MessageEntry }[],
+) => {
   return files.flatMap(({ name, data }) => {
     if (!Array.isArray(data)) return [];
     return data.flatMap((content) => {
