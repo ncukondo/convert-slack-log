@@ -39,12 +39,12 @@ type UserEntry = {
 };
 
 const convertOtherMessage = (
-  { message: { username } }: {
+  { message: { username, sub_type } }: {
     message: OtherMessageEntry;
   },
 ) => {
   const user_name = username ?? "";
-  return { user_name };
+  return { user_name, sub_type };
 };
 
 const convertUserMessage = (
