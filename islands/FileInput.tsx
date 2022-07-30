@@ -1,6 +1,6 @@
 /** @jsx h */
 import { h } from "preact";
-import { useEffect, useRef } from "preact/hooks";
+import { useEffect } from "preact/hooks";
 import { tw } from "@twind";
 import { convertSlackLogToCsv } from "../utils/slack-zip-to-csv.ts";
 import { addBOM, readAsArrayBuffer } from "../utils/data-utils.ts";
@@ -14,7 +14,7 @@ const downloadFile = (filename: string, data: Blob) => {
   URL.revokeObjectURL(link.href);
 };
 
-const onFile = async (files: FileList | null) => {
+const processFile = async (files: FileList) => {
   const file = files?.[0];
   if (!file) return;
   const buffer = await readAsArrayBuffer(file);
@@ -24,24 +24,20 @@ const onFile = async (files: FileList | null) => {
 };
 
 export default function FileInput() {
-  const { fileList, dragging, DropZone } = useDropZone();
-  const input = useRef<HTMLInputElement>(null);
+  const { fileList, dragging, DropZone, FileInputButton } = useDropZone();
   useEffect(() => {
-    if (fileList && input?.current) {
-      input.current.files = fileList;
-      onFile(fileList);
+    if (fileList) {
+      processFile(fileList);
     }
-  }, [fileList, input]);
+  }, [fileList]);
   return (
-    <div className={tw`flex gap-2 w-full`}>
+    <div class={tw`flex gap-2 w-full`}>
       <DropZone
-        className={tw`p-8 border-2 ${dragging && tw`bg-yellow-100`}`}
+        class={tw`p-8 border-2 ${dragging && tw`bg-yellow-100`}`}
       >
         <div class={tw`p-2`}>Drop file here or choose file.</div>
-        <input
-          type="file"
-          onInput={(e) => onFile(e.currentTarget?.files)}
-          ref={input}
+        <FileInputButton
+          class={tw`p-2 border-1 bg-yellow-100 hover:bg-yellow-200`}
         />
       </DropZone>
     </div>
