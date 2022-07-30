@@ -37,6 +37,7 @@ export default function FileInput() {
       >
         <div class={tw`p-2`}>Drop file here or choose file.</div>
         <FileInputButton
+          accept="application/x-zip-compressed"
           class={tw`p-2 border-1 bg-yellow-100 hover:bg-yellow-200`}
         />
       </DropZone>
