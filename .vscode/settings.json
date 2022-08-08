@@ -11,5 +11,6 @@
   "deno.codeLens.test": true,
   "deno.enable": true,
   "deno.unstable": true,
-  "editor.defaultFormatter": "denoland.vscode-deno"
+  "editor.defaultFormatter": "denoland.vscode-deno",
+  "editor.experimental.stickyScroll.enabled": true
 }
