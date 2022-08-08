@@ -4,7 +4,7 @@ import { useEffect } from "preact/hooks";
 import { tw } from "@twind";
 import { convertSlackLogToCsv } from "../utils/slack-zip-to-csv.ts";
 import { addBOM, readAsArrayBuffer } from "../utils/data-utils.ts";
-import { useDropZone } from "../components/DropZone.tsx";
+import { useDropZoneWithButton } from "../components/DropZone.tsx";
 
 const downloadFile = (filename: string, data: Blob) => {
   const link = document.createElement("a");
@@ -24,7 +24,8 @@ const processFile = async (files: FileList) => {
 };
 
 export default function FileInput() {
-  const { fileList, dragging, DropZone, FileInputButton } = useDropZone();
+  const { fileList, dragging, DropZone, FileInputButton } =
+    useDropZoneWithButton();
   useEffect(() => {
     if (fileList) {
       processFile(fileList);

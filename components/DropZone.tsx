@@ -45,7 +45,7 @@ const useFileInputButton = () => {
           ref={inputRef}
           {...{ multiple, accept }}
           onInput={handleInput}
-          style={{ opacity: 0, width: 1, height: 1 }}
+          style={{ display: "none" }}
         />
         <button onClick={handleClick} {...rest}>{text}</button>
       </div>
@@ -55,7 +55,7 @@ const useFileInputButton = () => {
 };
 
 const useDropZone = () => {
-  const { fileList, setFileList, FileInputButton } = useFileInputButton();
+  const [fileList, setFileList] = useState<FileList | null>(null);
   const [dragging, setDragging] = useState(false);
 
   const DropZone = (
@@ -98,7 +98,17 @@ const useDropZone = () => {
       </div>
     );
   };
-  return { fileList, dragging, DropZone, FileInputButton };
+  return { fileList, dragging, DropZone };
 };
 
-export { useDropZone, useFileInputButton };
+const useDropZoneWithButton = () => {
+  const { fileList, setFileList, FileInputButton } = useFileInputButton();
+  const opts = useDropZone();
+
+  useEffect(() => {
+    setFileList(opts.fileList);
+  }, [opts.fileList]);
+  return { ...opts, fileList, FileInputButton };
+};
+
+export { useDropZone, useDropZoneWithButton };
